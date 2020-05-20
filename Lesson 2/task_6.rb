@@ -3,15 +3,15 @@
 products = {}
 
 loop do
-puts 'Введите название товара?'
-product_name = gets.chomp
-break if product_name == 'стоп'
+  puts 'Введите название товара?'
+  product_name = gets.chomp
+  break if product_name == 'стоп'
 
-puts 'Введите цену за единицу?'
-price = gets.to_f
-puts 'Введите количество товара'
-product_quantity = gets.to_f
-products[product_name] = { price: price, product_quantity: product_quantity }
+  puts 'Введите цену за единицу?'
+  price = gets.to_f
+  puts 'Введите количество товара'
+  product_quantity = gets.to_f
+  products[product_name] = { price: price, product_quantity: product_quantity }
 end
 product_sum = 0
 puts products

@@ -8,11 +8,7 @@ year = user_date[2].to_i
 days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 days[1] = 29 if ((year % 4).zero? && (year % 100).zero? && (year % 400).zero?) ||
                 ((year % 4).zero? && (year % 100).positive?)
-index = 0
 past_days = []
-while index <= (month - 1)
-  past_days << days[index]
-  index += 1
-end
+(0..month - 1).each { |e| past_days << days[e] }
 date_number = past_days.inject(0) { |result, elem| result + elem } + day
 puts date_number
