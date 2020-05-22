@@ -9,29 +9,25 @@ class Station
     @trains = []
   end
 
-  def train_arrives(train)
-    puts "Поезд #{train.train_number} прибыл на станцию #{station_name} "
+  def add_train(train)
+    puts "Поезд #{train.number} прибыл на станцию #{station_name} "
     trains << train
     train.current_train_station(self)
   end
 
-
-  def train_leaves(train)
-    puts "Поезд #{train.train_number} покинул станцию #{station_name} "
+  def move_train(train)
+    puts "Поезд #{train.number} покинул станцию #{station_name} "
     trains.delete(train)
   end
 
-  def trains_on_station
-    passengers_train = []
-    freight_train = []
+  def trains_on_station(type)
+    trains_types = []
+    puts 'Поезда на станции: '
     trains.each do |train|
-      if train.passenger_train
-        passengers_train << train
-      elsif train.freight_train
-        freight_train << train
-      end
-      puts "Поезда на станции: #{train.train_number}"
+      puts train.number
+      trains_types << train.type
     end
-    puts " Пассажирских #{passengers_train.length}, Грузовых #{freight_train.length}"
+    trains_types.select! { |train_type| train_type == type }
+    puts "#{type} #{trains_types.length}"
   end
 end
