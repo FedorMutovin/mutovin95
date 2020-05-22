@@ -18,13 +18,13 @@ class Station
 
   def train_leaves(train)
     puts "Поезд #{train.train_number} покинул станцию #{station_name} "
-    @trains.delete(train)
+    trains.delete(train)
   end
 
   def trains_on_station
     passengers_train = []
     freight_train = []
-    @trains.each do |train|
+    trains.each do |train|
       if train.passenger_train
         passengers_train << train
       elsif train.freight_train

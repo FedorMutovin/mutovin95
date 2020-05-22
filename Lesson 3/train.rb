@@ -69,18 +69,15 @@ class Train
         @current_station = @route_station[@station_index + step]
         @current_station.train_arrives(self)
         take_station_index
-        if @station_index + 1 > @route_station.index(@route_station[-1])
-          @next_station = 'Достигнут конец маршрут'
-        else
-          @next_station = @route_station[@station_index + 1]
-        end
+        @next_station = @route_station[@station_index + 1]
       end
     end
   end
 
   def show_train_traffic_history
     puts "Поезд находиться на станции: #{@current_station.station_name},
-          предыдущая: #{@last_station.station_name}, следующая #{@next_station.station_name}"
+          предыдущая: #{@last_station.station_name},
+          следующая: #{@next_station.nil? ? 'Конец маршрута' : "#{@next_station.station_name}.to_s"}"
   end
 
   def take_station_index
