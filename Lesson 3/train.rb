@@ -62,8 +62,7 @@ class Train
       puts 'Поезд не может покинуть пределы маршрута'
     else
       @current_station.move_train(self)
-      next_station
-      @current_station = @next_station
+      @current_station = next_station
       @current_station.add_train(self)
     end
   end
@@ -73,18 +72,17 @@ class Train
       puts 'Поезд не может покинуть пределы маршрута'
     else
       @current_station.move_train(self)
-      last_station
-      @current_station = @last_station
+      @current_station = last_station
       @current_station.add_train(self)
     end
   end
 
   def last_station
-    @last_station = route_stations[current_station_index - 1]
+    route_stations[current_station_index - 1]
   end
 
   def next_station
-    @next_station = route_stations[current_station_index + 1]
+    route_stations[current_station_index + 1]
   end
 
   def current_station_index
