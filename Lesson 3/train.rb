@@ -58,8 +58,7 @@ class Train
   end
 
   def move_to_next_station
-    take_station_index
-    if @station_index + 1 > @stations.index(@stations[-1])
+    if current_station_index + 1 > route_stations.index(route_stations[-1])
       puts 'Поезд не может покинуть пределы маршрута'
     else
       @current_station.move_train(self)
@@ -70,8 +69,7 @@ class Train
   end
 
   def move_to_last_station
-    take_station_index
-    if (@station_index - 1).negative?
+    if (current_station_index - 1).negative?
       puts 'Поезд не может покинуть пределы маршрута'
     else
       @current_station.move_train(self)
@@ -82,18 +80,19 @@ class Train
   end
 
   def last_station
-    take_station_index
-    @last_station = @stations[@station_index - 1]
+    @last_station = route_stations[current_station_index - 1]
   end
 
   def next_station
-    take_station_index
-    @next_station = @stations[@station_index + 1]
+    @next_station = route_stations[current_station_index + 1]
   end
 
-  def take_station_index
-    @stations = @route.stations
-    @station_index = @stations.index(@current_station)
+  def current_station_index
+    @route.stations.index(@current_station)
+  end
+
+  def route_stations
+    @route.stations
   end
 
   def current_train_station(station)
