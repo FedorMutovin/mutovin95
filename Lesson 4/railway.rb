@@ -87,9 +87,9 @@ class Railway
               2. Грузовой"
         user_train_type = gets.chomp
         if user_train_type == '1'
-          train.add_passenger_type
+          add_passenger_type(train)
         elsif user_train_type == '2'
-          train.add_cargo_type
+          add_cargo_type(train)
         else
           puts 'Тип не задан'
         end
@@ -240,6 +240,16 @@ class Railway
     choose_user_train
     train_have_route
     @user_train.move_to_last_station
+  end
+
+  def add_passenger_type(train)
+    passenger_train = PassengerTrain.new(train)
+    self.type = :passenger
+  end
+
+  def add_cargo_type(train)
+    cargo_train = CargoTrain.new(train)
+    self.type = :cargo
   end
 
   def change_root(user_route)

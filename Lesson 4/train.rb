@@ -91,14 +91,6 @@ class Train
     end
   end
 
-  def add_passenger_type
-    self.type = PassengerTrain.new
-  end
-
-  def add_cargo_type
-    self.type = CargoTrain.new
-  end
-
   def add_passenger_wagon
     passenger_wagon = PassengerWagon.new
     add_wagon(passenger_wagon)
