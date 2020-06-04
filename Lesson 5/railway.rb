@@ -243,13 +243,13 @@ class Railway
   end
 
   def add_passenger_type(train)
-    passenger_train = PassengerTrain.new(train)
-    self.type = :passenger
+    PassengerTrain.new(train)
+    train.type = :passenger
   end
 
   def add_cargo_type(train)
-    cargo_train = CargoTrain.new(train)
-    self.type = :cargo
+    CargoTrain.new(train)
+    train.type = :cargo
   end
 
   def change_root(user_route)

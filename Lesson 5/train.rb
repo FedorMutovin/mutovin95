@@ -1,13 +1,26 @@
 # frozen_string_literal: true
 
+require_relative 'company'
+require_relative 'instance_counter'
+
 class Train
+  include InstanceCounter
+  extend Company
+
   attr_accessor :speed, :route, :wagons, :type
   attr_reader :number
+
+  @@trains = {}
+  def self.find(train_number)
+    @@trains[train_number]
+  end
 
   def initialize(number)
     @number = number
     @wagons = []
     @speed = 0
+    @@trains[number] = self
+    register_instance
   end
 
   def disperse(speed)
