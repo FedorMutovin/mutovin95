@@ -28,7 +28,6 @@ class Train
 
   def disperse(speed)
     self.speed += speed
-    puts "Скорость поезда увеличена до #{speed}!"
   end
 
   def current_speed
@@ -37,7 +36,6 @@ class Train
 
   def stop
     self.speed = 0
-    puts 'Поезд остановлен!'
   end
 
   def show_number_of_wagons
@@ -92,7 +90,6 @@ class Train
     end
 
     wagons << wagon
-    puts "Текущее количество вагонов: #{wagons.length}"
   end
 
   def delete_wagon(wagon)
@@ -101,7 +98,6 @@ class Train
     end
 
     wagons.delete(wagon)
-    puts "Текущее количество вагонов: #{wagons.length}"
   end
 
   def add_passenger_wagon

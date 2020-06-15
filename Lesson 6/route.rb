@@ -23,7 +23,6 @@ class Route
   end
 
   def show_stations_on_route
-    puts 'Станции по маршруту: '
     stations.each { |station| puts station.name }
   end
 

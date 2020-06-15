@@ -108,8 +108,7 @@ class Railway
 
   def add_route
     if user_stations.empty? || user_stations.length < 2
-      puts 'Для того чтобы построить маршрут, вам нужно создать минимум 2 станции'
-      add_station
+      raise 'Для того чтобы построить маршрут, вам нужно создать минимум 2 станции'
     else
       puts 'Выберите номер начальной станции'
       user_stations.each { |e| puts "#{(user_stations.index(e) + 1)}.#{e.name}" }
