@@ -23,7 +23,7 @@ class Route
   end
 
   def show_stations_on_route
-    stations.each { |station| puts station.name }
+    stations.each(&:name)
   end
 
   def stations
