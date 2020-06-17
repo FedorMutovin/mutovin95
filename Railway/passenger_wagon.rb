@@ -35,8 +35,4 @@ class PassengerWagon < PassengerTrain
   def empty_seats
     seats - taken_seats
   end
-
-  def passenger?
-    wagon_type == :passenger
-  end
 end

@@ -188,7 +188,7 @@ class Railway
         puts "Номер поезда на станции: #{train.number}, тип: #{train.type}, кол-во вагонов: #{train.wagons.length}"
         train.all_wagons do |wagon|
           puts "номер вагона: #{wagon.number},тип вагона: #{wagon.wagon_type}"
-          if wagon.wagon_type.passenger?
+          if wagon.wagon_type == :passenger
             puts "места: #{wagon.show_all_seats}, кол-во свободных мест #{wagon.show_empty_seats}"
           else
             puts "обьем: #{wagon.show_total}, кол-во свободного обьема #{wagon.show_available_total}"
