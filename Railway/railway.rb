@@ -132,10 +132,16 @@ class Railway
 
   def add_wagon_to_train
     choose_user_train
+    puts 'Укажите номер вагона?'
+    user_number = gets.chomp.to_i
     if @user_train.type == :passenger
-      @user_train.add_passenger_wagon
+      puts 'Какое количество сидений добавить в вагон?'
+      user_seats = gets.chomp.to_i
+      @user_train.add_passenger_wagon(user_seats, user_number)
     else
-      @user_train.add_cargo_wagon
+      puts 'Какое количество обьема добавить в вагон?'
+      user_total = gets.chomp.to_f
+      @user_train.add_cargo_wagon(user_total, user_number)
     end
   end
 
@@ -168,20 +174,19 @@ class Railway
   def show_user_stations
     raise 'Нет доступных станций' if user_stations.empty?
 
-    puts 'Ваши станции. Выберите станцию, для просмотра на ней списка поездов'
-    choose_user_stations
-    user_station = gets.chomp
-    station = user_stations[user_station.to_i - 1]
-    puts 'Какой тип поезда вы хотите посмотреть на станции?
-             1. Пассажирские
-             2. Грузовые'
-    answer = gets.chomp
-    if answer == '1'
-      station.trains_on_station(:passenger)
-    elsif answer == '2'
-      station.trains_on_station(:cargo)
-    else
-      raise 'Неверный тип поезда'
+    user_stations.each do |user_station|
+      puts "Станция: #{user_station.name}"
+      user_station.trains_on_station do |train|
+        puts "Номер поезда на станции: #{train.number}, тип: #{train.type}, кол-во вагонов: #{train.wagons.length}"
+        train.all_wagons do |wagon|
+          puts "номер вагона: #{wagon.number},тип вагона: #{wagon.wagon_type}"
+          if wagon.wagon_type == :passenger
+            puts "места: #{wagon.show_all_seats}, кол-во свободных мест #{wagon.show_empty_seats}"
+          else
+            puts "обьем: #{wagon.show_total}, кол-во свободного обьема #{wagon.show_available_total}"
+          end
+        end
+      end
     end
   end
 

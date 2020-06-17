@@ -5,6 +5,7 @@ require_relative 'instance_counter'
 
 class Station
   include Validator
+  include InstanceCounter
 
   attr_accessor :trains
   attr_reader :name
@@ -14,7 +15,7 @@ class Station
   end
 
   def initialize(name)
-    @name = name.to_s
+    @name = name
     @trains = []
     @@all << self
     register_instance
@@ -29,11 +30,7 @@ class Station
     trains.delete(train)
   end
 
-  def trains_on_station(type)
-    trains_types = []
-    trains.each do |train|
-      trains_types << train.type
-    end
-    trains_types.select! { |train_type| train_type == type }
+  def trains_on_station
+    trains.each { |train| yield(train) }
   end
 end

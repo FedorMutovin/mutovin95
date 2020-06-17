@@ -2,12 +2,14 @@
 
 require_relative 'company'
 require_relative 'instance_counter'
+require_relative 'validator'
 
 class Train
+  include Validator
   include InstanceCounter
   extend Company
 
-  attr_accessor :speed, :route, :wagons, :type
+  attr_accessor :speed, :route, :wagons, :type, :number
   attr_reader :number
 
   @@trains = {}
@@ -16,16 +18,16 @@ class Train
   end
 
   def initialize(number)
-    @number = number
+    @number = number.to_s
     @wagons = []
     @speed = 0
     @@trains[number] = self
+    validate_number!
     register_instance
   end
 
   def disperse(speed)
     self.speed += speed
-    puts "Скорость поезда увеличена до #{speed}!"
   end
 
   def current_speed
@@ -34,7 +36,6 @@ class Train
 
   def stop
     self.speed = 0
-    puts 'Поезд остановлен!'
   end
 
   def show_number_of_wagons
@@ -48,22 +49,22 @@ class Train
 
   def move_to_next_station
     if current_station_index + 1 > route_stations.index(route_stations[-1])
-      puts 'Поезд не может покинуть пределы маршрута'
-    else
-      @current_station.move_train(self)
-      @current_station = next_station
-      @current_station.add_train(self)
+      raise 'Поезд не может покинуть пределы маршрута'
     end
+
+    @current_station.move_train(self)
+    @current_station = next_station
+    @current_station.add_train(self)
   end
 
   def move_to_last_station
     if (current_station_index - 1).negative?
-      puts 'Поезд не может покинуть пределы маршрута'
-    else
-      @current_station.move_train(self)
-      @current_station = last_station
-      @current_station.add_train(self)
+      raise 'Поезд не может покинуть пределы маршрута'
     end
+
+    @current_station.move_train(self)
+    @current_station = last_station
+    @current_station.add_train(self)
   end
 
   def last_station
@@ -82,36 +83,26 @@ class Train
     @current_station = station
   end
 
-  def add_wagon(wagon)
-    if wagons.include?(wagon)
-      puts 'Данный вагон уже добавлен к поезду'
-    else
-      if speed.zero?
-        wagons << wagon
-        puts "Текущее количество вагонов: #{wagons.length}"
-      else
-        puts 'Поезд движется! Для изменения количества вагонов остановите поезд'
-      end
-    end
-  end
-
   def delete_wagon(wagon)
-    if speed.zero?
-      wagons.delete(wagon)
-      puts "Текущее количество вагонов: #{wagons.length}"
-    else
-      puts 'Поезд движется! Для изменения количества вагонов остановите поезд'
+    unless speed.zero?
+      raise 'Поезд движется! Для изменения количества вагонов остановите поезд'
     end
+
+    wagons.delete(wagon)
   end
 
-  def add_passenger_wagon
-    passenger_wagon = PassengerWagon.new
+  def add_passenger_wagon(seats, number)
+    passenger_wagon = PassengerWagon.new(seats, number)
     add_wagon(passenger_wagon)
   end
 
-  def add_cargo_wagon
-    cargo_wagon = CargoWagon.new
+  def add_cargo_wagon(total, number)
+    cargo_wagon = CargoWagon.new(total, number)
     add_wagon(cargo_wagon)
+  end
+
+  def all_wagons
+    wagons.each { |wagon| yield(wagon) }
   end
 
   protected
@@ -126,5 +117,14 @@ class Train
 
   def current_station_index
     @route.stations.index(@current_station)
+  end
+
+  def add_wagon(wagon)
+    raise 'Данный вагон уже добавлен к поезду' if wagons.include?(wagon)
+    unless speed.zero?
+      raise 'Поезд движется! Для изменения количества вагонов остановите поезд'
+    end
+
+    wagons << wagon
   end
 end

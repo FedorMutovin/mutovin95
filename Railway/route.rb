@@ -5,6 +5,7 @@ require_relative 'validator'
 
 class Route
   include Validator
+  include InstanceCounter
   attr_accessor :intermediate_stations, :start_station, :end_station
 
   def initialize(start_station, end_station)
