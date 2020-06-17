@@ -8,8 +8,10 @@ require_relative 'route'
 require_relative 'station'
 require_relative 'train'
 require_relative 'main'
+require_relative 'validator'
 
 class Railway
+  include Validator
   attr_accessor :user_stations, :user_trains, :user_routes, :user_train, :user_route
 
   def initialize
@@ -29,7 +31,9 @@ class Railway
              6. Отцеплять вагоны от поезда
              7. Перемещать поезд по маршруту вперед и назад
              8. Просматривать список станций и список поездов на станции
-             9. Выйти'
+             9. Заполнить обьем вагона(для грузовых)
+             10.Занять место в вагоне(для пассажирских)
+             Любая кнопка => Выйти'
       operation = gets.chomp
       case operation
       when '1'
@@ -48,6 +52,10 @@ class Railway
         move_train
       when '8'
         show_user_stations
+      when '9'
+        take_total_on_user_wagon
+      when '10'
+        take_seat_on_user_wagon
       else
         break
       end
@@ -180,7 +188,7 @@ class Railway
         puts "Номер поезда на станции: #{train.number}, тип: #{train.type}, кол-во вагонов: #{train.wagons.length}"
         train.all_wagons do |wagon|
           puts "номер вагона: #{wagon.number},тип вагона: #{wagon.wagon_type}"
-          if wagon.wagon_type == :passenger
+          if wagon.wagon_type.passenger?
             puts "места: #{wagon.show_all_seats}, кол-во свободных мест #{wagon.show_empty_seats}"
           else
             puts "обьем: #{wagon.show_total}, кол-во свободного обьема #{wagon.show_available_total}"
@@ -190,7 +198,44 @@ class Railway
     end
   end
 
+  def take_seat_on_user_wagon
+    validate_user_passenger_trains
+
+    puts 'В каком пассажирском поезде вы хотите занять вагон?'
+    take_wagon(:passenger)
+    @user_wagon.take_seat
+  end
+
+  def take_total_on_user_wagon
+    validate_user_cargo_trains
+    puts 'Какой обьем вы хотите занять?'
+    user_total = gets.chomp.to_f
+    puts 'В каком грузовом поезде вы хотите занять обьем?'
+    take_wagon(:cargo)
+    @user_wagon.take_total(user_total)
+  end
+
   private
+
+  def take_wagon(type)
+    user_trains.each do |user_train|
+      puts "#{user_trains.index(user_train) + 1}. #{user_train.number}" if user_train.type == type
+      train_index = gets.chomp.to_i
+      raise 'Нет вагонов ' if user_trains[train_index - 1].wagons.empty?
+
+      seat_question
+      user_trains[train_index - 1].all_wagons do |wagon|
+        puts "#{user_trains[train_index - 1].wagons.index(wagon) + 1}. #{wagon.number}"
+        wagon_index = gets.chomp.to_i
+        @user_wagon = user_trains[train_index - 1].wagons[wagon_index - 1]
+      end
+      return @user_wagon
+    end
+  end
+
+  def seat_question
+    puts 'В каком вагоне вы хотели бы занять место?'
+  end
 
   def change_station_text
     puts 'Выберите номер станции, на которую хотите заменить'

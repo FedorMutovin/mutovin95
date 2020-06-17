@@ -2,11 +2,13 @@
 
 require_relative 'passenger_train'
 require_relative 'company'
+require_relative 'validator'
 
 class PassengerWagon < PassengerTrain
   attr_accessor :seats, :taken_seats
   attr_reader :number, :wagon_type
   extend Company
+  include Validator
   def initialize(number, seats)
     @wagon_type = :passenger
     @seats = seats
@@ -15,6 +17,7 @@ class PassengerWagon < PassengerTrain
   end
 
   def take_seat
+    validate_empty_seats
     self.taken_seats = taken_seats + 1
   end
 
@@ -23,14 +26,17 @@ class PassengerWagon < PassengerTrain
   end
 
   def show_empty_seats
-    raise 'Нет свободных мест' if empty_seats.negative? || empty_seats.zero?
-
     empty_seats
+    validate_empty_seats
   end
 
   private
 
   def empty_seats
     seats - taken_seats
+  end
+
+  def passenger?
+    wagon_type == :passenger
   end
 end
