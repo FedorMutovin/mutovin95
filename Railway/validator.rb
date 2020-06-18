@@ -37,8 +37,9 @@ module Validator
   private
 
   def validate_train_type(train_type)
-    trains = []
-    user_trains.each { |user_train| trains << user_train.type if user_train.type == train_type }
-    raise 'У вас нет созданных поездов подходящего типа' if user_trains.empty? || trains.empty?
+    user_trains.each_with_object([]) do |user_train, arr|
+      arr << user_train.type if user_train.type == train_type
+      raise 'У вас нет созданных поездов подходящего типа' if user_trains.empty? || arr.empty?
+    end
   end
 end

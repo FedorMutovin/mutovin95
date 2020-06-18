@@ -229,7 +229,7 @@ class Railway
         wagon_index = gets.chomp.to_i
         @user_wagon = user_trains[train_index - 1].wagons[wagon_index - 1]
       end
-      return @user_wagon
+      @user_wagon
     end
   end
 
