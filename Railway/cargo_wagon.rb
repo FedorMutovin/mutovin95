@@ -11,14 +11,14 @@ class CargoWagon < CargoTrain
   include Validator
   def initialize(number, total)
     @wagon_type = :cargo
-    @total = total
+    @total = total.to_f
     @taken_total = 0
     @number = number
   end
 
   def take_total(user_total)
     validate_available_total
-    self.taken_total = taken_total + user_total
+    self.taken_total += user_total.to_i
   end
 
   def show_total
@@ -26,8 +26,8 @@ class CargoWagon < CargoTrain
   end
 
   def show_available_total
-    available_total
     validate_available_total
+    puts available_total
   end
 
   private
@@ -35,5 +35,4 @@ class CargoWagon < CargoTrain
   def available_total
     total - taken_total
   end
-
 end

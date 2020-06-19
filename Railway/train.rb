@@ -3,10 +3,13 @@
 require_relative 'company'
 require_relative 'instance_counter'
 require_relative 'validator'
+require_relative 'tips'
 
 class Train
   include Validator
   include InstanceCounter
+  include Tips
+
   extend Company
 
   attr_accessor :speed, :route, :wagons, :type, :number
@@ -105,15 +108,40 @@ class Train
     wagons.each { |wagon| yield(wagon) }
   end
 
-  protected
+  def add_type
+    choose_train_type if type.nil?
+  end
 
-  # для определения типа вагона
+  protected
 
   attr_reader :variety, :wagon_type
 
   private
 
-  # для вычисления индекса станции
+  def add_passenger_type(train)
+    PassengerTrain.new(train)
+    train.type = :passenger
+  end
+
+  def add_cargo_type(train)
+    CargoTrain.new(train)
+    train.type = :cargo
+  end
+
+  def choose_train_type
+    show_train_types_tip
+    answer = gets.chomp
+    if answer == '1'
+      add_passenger_type(self)
+    elsif answer == '2'
+      add_cargo_type(self)
+    else
+      raise 'Тип не задан'
+    end
+  rescue RuntimeError => e
+    e.message
+    retry
+  end
 
   def current_station_index
     @route.stations.index(@current_station)

@@ -11,14 +11,14 @@ class PassengerWagon < PassengerTrain
   include Validator
   def initialize(number, seats)
     @wagon_type = :passenger
-    @seats = seats
+    @seats = seats.to_f
     @taken_seats = 0
     @number = number
   end
 
   def take_seat
     validate_empty_seats
-    self.taken_seats = taken_seats + 1
+    self.taken_seats += 1
   end
 
   def show_all_seats
@@ -26,8 +26,8 @@ class PassengerWagon < PassengerTrain
   end
 
   def show_empty_seats
-    empty_seats
     validate_empty_seats
+    puts empty_seats
   end
 
   private

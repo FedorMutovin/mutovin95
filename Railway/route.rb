@@ -6,21 +6,21 @@ require_relative 'validator'
 class Route
   include Validator
   include InstanceCounter
-  attr_accessor :intermediate_stations, :start_station, :end_station
+  attr_accessor :mid_stations, :start_station, :end_station
 
   def initialize(start_station, end_station)
     @start_station = start_station
     @end_station = end_station
-    @intermediate_stations = []
+    @mid_stations = []
     register_instance
   end
 
-  def add_intermediate_station(station)
-    intermediate_stations << station
+  def add_mid_station(station)
+    mid_stations << station
   end
 
-  def delete_intermediate_station(station)
-    intermediate_stations.delete(station)
+  def delete_mid_station(station)
+    mid_stations.delete(station)
   end
 
   def show_stations_on_route
@@ -28,6 +28,6 @@ class Route
   end
 
   def stations
-    [start_station] + intermediate_stations + [end_station]
+    [start_station] + mid_stations + [end_station]
   end
 end
