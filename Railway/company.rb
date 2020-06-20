@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Company
   attr_reader :company_name
   def add_company_name(name)

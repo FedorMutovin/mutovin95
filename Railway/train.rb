@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'company'
 require_relative 'instance_counter'
 require_relative 'validator'
@@ -13,18 +11,23 @@ class Train
   extend Company
 
   attr_accessor :speed, :route, :wagons, :type, :number
-  attr_reader :number
 
-  @@trains = {}
+  TRAIN_TYPES = { '1' => :add_passenger_type,
+                  '2' => :add_cargo_type }.freeze
+
+  class << self
+    attr_reader :trains
+  end
+  @trains = {}
   def self.find(train_number)
-    @@trains[train_number]
+    @trains[train_number]
   end
 
   def initialize(number)
     @number = number.to_s
     @wagons = []
     @speed = 0
-    @@trains[number] = self
+    self.class.trains[number] = self
     validate_number!
     register_instance
   end
@@ -61,9 +64,7 @@ class Train
   end
 
   def move_to_last_station
-    if (current_station_index - 1).negative?
-      raise 'Поезд не может покинуть пределы маршрута'
-    end
+    raise 'Поезд не может покинуть пределы маршрута' if (current_station_index - 1).negative?
 
     @current_station.move_train(self)
     @current_station = last_station
@@ -87,9 +88,7 @@ class Train
   end
 
   def delete_wagon(wagon)
-    unless speed.zero?
-      raise 'Поезд движется! Для изменения количества вагонов остановите поезд'
-    end
+    raise 'Поезд движется! Для изменения количества вагонов остановите поезд' unless speed.zero?
 
     wagons.delete(wagon)
   end
@@ -131,13 +130,9 @@ class Train
   def choose_train_type
     show_train_types_tip
     answer = gets.chomp
-    if answer == '1'
-      add_passenger_type(self)
-    elsif answer == '2'
-      add_cargo_type(self)
-    else
-      raise 'Тип не задан'
-    end
+    raise 'Тип не задан' if TRAIN_TYPES[answer].nil?
+
+    send TRAIN_TYPES[answer]
   rescue RuntimeError => e
     e.message
     retry
@@ -149,9 +144,7 @@ class Train
 
   def add_wagon(wagon)
     raise 'Данный вагон уже добавлен к поезду' if wagons.include?(wagon)
-    unless speed.zero?
-      raise 'Поезд движется! Для изменения количества вагонов остановите поезд'
-    end
+    raise 'Поезд движется! Для изменения количества вагонов остановите поезд' unless speed.zero?
 
     wagons << wagon
   end

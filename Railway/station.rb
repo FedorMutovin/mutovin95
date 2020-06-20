@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'validator'
 require_relative 'instance_counter'
 
@@ -9,15 +7,15 @@ class Station
 
   attr_accessor :trains
   attr_reader :name
-  @@all = []
-  def self.all
-    @@all
+  class << self
+    attr_reader :all
   end
+  @all = []
 
   def initialize(name)
     @name = name
     @trains = []
-    @@all << self
+    self.class.all << self
     register_instance
   end
 

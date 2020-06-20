@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'cargo_train'
 require_relative 'company'
 require_relative 'validator'

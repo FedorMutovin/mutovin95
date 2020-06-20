@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Validator
-  TRAIN_NUMBER_EXAMPLE = /^[а-яА-ЯёЁa-zA-Z0-9]{3}-*[а-яА-ЯёЁa-zA-Z0-9]{2}$/.freeze
+  TRAIN_NUMBER_TIP = /^[а-яА-ЯёЁa-zA-Z0-9]{3}-*[а-яА-ЯёЁa-zA-Z0-9]{2}$/.freeze
 
   def validate_number!
-    raise 'Неверный формат номера поезда' if number !~ TRAIN_NUMBER_EXAMPLE
+    raise 'Неверный формат номера поезда' if number !~ TRAIN_NUMBER_TIP
   end
 
   def valid?

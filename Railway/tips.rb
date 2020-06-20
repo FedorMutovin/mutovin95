@@ -1,19 +1,20 @@
-# frozen_string_literal: true
-
 module Tips
+  MENU_TIPS = { '1.' => 'Создавать станции',
+                '2.' => 'Создавать поезда',
+                '3.' => 'Создавать маршруты и управлять станциями в нем',
+                '4.' => 'Назначать маршрут поезду',
+                '5.' => 'Добавлять вагоны к поезду',
+                '6.' => 'Отцеплять вагоны от поезда',
+                '7.' => 'Перемещать поезд по маршруту вперед и назад',
+                '8.' => 'Просматривать список станций и список поездов на станции',
+                '9.' => 'Заполнить обьем вагона(для грузовых)',
+                '10.' => 'Занять место в вагоне(для пассажирских)',
+                'Любая другая => ' => 'Выйти' }.freeze
+
   def show_menu_operations
-    puts 'Программа управления железнодорожной станцией. Выберите номер операции
-               1. Создавать станции
-               2. Создавать поезда
-               3. Создавать маршруты и управлять станциями в нем
-               4. Назначать маршрут поезду
-               5. Добавлять вагоны к поезду
-               6. Отцеплять вагоны от поезда
-               7. Перемещать поезд по маршруту вперед и назад
-               8. Просматривать список станций и список поездов на станции
-               9. Заполнить обьем вагона(для грузовых)
-               10.Занять место в вагоне(для пассажирских)
-               Любая кнопка => Выйти'
+    puts 'Программа управления железнодорожной станцией. Выберите номер операции'
+    MENU_TIPS.each { |key, value| puts "#{key}#{value}" }
+    user_answer
   end
 
   def show_train_types_tip
@@ -76,6 +77,10 @@ module Tips
   def show_train_with_wagons(train)
     puts "Номер поезда на станции: #{train.number}, тип: #{train.type},
           кол-во вагонов: #{train.wagons.length}"
+    train_all_wagons(train)
+  end
+
+  def train_all_wagons(train)
     train.all_wagons do |wagon|
       puts "номер вагона: #{wagon.number},тип вагона: #{wagon.wagon_type}"
       if wagon.wagon_type == :passenger
@@ -102,9 +107,7 @@ module Tips
 
   def show_trains_by_type(type)
     user_trains.each do |train|
-      if train.type == type
-        puts "#{user_trains.index(train) + 1}. #{train.number}"
-      end
+      puts "#{user_trains.index(train) + 1}. #{train.number}" if train.type == type
     end
     user_answer
   end
