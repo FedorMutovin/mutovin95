@@ -2,11 +2,15 @@ require_relative 'company'
 require_relative 'instance_counter'
 require_relative 'validator'
 require_relative 'tips'
+require_relative 'accessors'
+require_relative 'validation'
 
 class Train
+  extend Accessors
   include Validator
   include InstanceCounter
   include Tips
+  include Validation
 
   extend Company
 
@@ -28,7 +32,8 @@ class Train
     @wagons = []
     @speed = 0
     self.class.trains[number] = self
-    validate_number!
+    self.class.validate :number, :format, TRAIN_NUMBER_TIP
+    validate!
     register_instance
   end
 

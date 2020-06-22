@@ -5,14 +5,6 @@ module Validator
     raise 'Неверный формат номера поезда' if number !~ TRAIN_NUMBER_TIP
   end
 
-  def valid?
-    validate_number!
-    true
-  rescue RuntimeError => e
-    e.message
-    false
-  end
-
   def validate_empty_seats
     raise 'Нет свободных мест' if empty_seats.negative? || empty_seats.zero? ||
                                   taken_seats == seats

@@ -9,8 +9,11 @@ require_relative 'main'
 require_relative 'validator'
 require_relative 'tips'
 require_relative 'railway_model'
+require_relative 'accessors'
+require_relative 'validation'
 
 class RailwayController < RailwayModel
+  include Validation
   include Validator
   include Tips
   attr_accessor :user_stations, :user_trains, :user_routes, :user_train,
