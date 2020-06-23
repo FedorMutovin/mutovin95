@@ -8,6 +8,7 @@ module Accessors
       define_method("#{name}=") do |value|
         instance_variable_set(var_name, value)
         history << value
+        history.delete_at(0) if history.length > 2
       end
       define_method("#{name}_history") do
         instance_variable_set(var_history, history)

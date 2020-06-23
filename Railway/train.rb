@@ -19,6 +19,8 @@ class Train
   TRAIN_TYPES = { '1' => :add_passenger_type,
                   '2' => :add_cargo_type }.freeze
 
+  validate :number, :format, TRAIN_NUMBER_TIP
+
   class << self
     attr_reader :trains
   end
@@ -32,7 +34,6 @@ class Train
     @wagons = []
     @speed = 0
     self.class.trains[number] = self
-    self.class.validate :number, :format, TRAIN_NUMBER_TIP
     validate!
     register_instance
   end
